@@ -219,9 +219,10 @@
             display: none !important;
         }
 
+        /* ★修正部分：ホバー時に大きくなったり浮き上がったりしないように変更 ★ */
         .item-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 0px rgba(42, 27, 78, 0.15); 
+            transform: none;
+            box-shadow: 0 5px 0px rgba(42, 27, 78, 0.15); 
         }
 
         .item-card.checked {
@@ -322,7 +323,7 @@
             font-size: 0.85rem; 
             color: transparent;
             transition: background 0.2s, color 0.2s;
-            box-shadow: 0 2px 0px rgba(42, 27, 78, 0.1); 
+            box-shadow: 0 2px 0px rgba(42, 27, 78, 0.1), 
             cursor: pointer;
         }
 
@@ -426,12 +427,12 @@
                 box-shadow: 0 3px 0px rgba(42, 27, 78, 0.15); 
             }
 
-            /* --- 🛠️ スマホのときだけ画像コンテナの位置をさらに上（top: -5px）に引き上げる --- */
+            /* --- スマホのときだけ画像コンテナの位置をさらに上（top: -5px）に引き上げる --- */
             .item-card .item-image-container {
                 top: -5px;
             }
 
-            /* --- 🛠️ 画像サイズを少し小さく（height: 55%）してボタンと被らないように調整 --- */
+            /* --- 画像サイズを少し小さく（height: 55%）してボタンと被らないように調整 --- */
             .item-card .item-image {
                 height: 55%;
                 margin-bottom: 0;
@@ -593,7 +594,7 @@
 
         <div class="gauge-box">
             <div class="progress-text" id="text-container-level">
-                <span>⭐ 合計レベル:</span> <span id="num-display-level">61 / 302</span>
+                <span>⭐ 合計レベル:</span> <span id="num-display-level">0 / 302</span>
             </div>
             <div class="progress-bar-bg">
                 <div class="progress-bar-fill-level" id="progress-bar-level"></div>
@@ -675,18 +676,19 @@
         spirits.push({ id: 54, spiritId: "spirit54", name: "ボスの精霊", rarity: "legendary", style: "デフォルト", image: "ボスの精霊.webp", maxLevel: 5 });
         spirits.push({ id: 55, spiritId: "spirit55", name: "ゴールド ボスの精霊", rarity: "special", style: "ゴールド", image: "ボスの精霊ゴールド.webp", maxLevel: 5 });
         spirits.push({ id: 56, spiritId: "spirit56", name: "グミ ボスの精霊", rarity: "special", style: "グミ", image: "ボスの精霊グミ.webp", maxLevel: 5 });
-        spirits.push({ id: 57, spiritId: "spirit57", name: "ボスの精霊ギャラクシー", rarity: "special", style: "ギャラクシー", image: "ボスの精霊ギャラクシー.webp", maxLevel: 5 });
+        spirits.push({ id: 57, spiritId: "spirit57", name: "ギャラクシー ボスの精霊ギャラクシー", rarity: "special", style: "ギャラクシー", image: "ボスの精霊ギャラクシー.webp", maxLevel: 5 });
         spirits.push({ id: 58, spiritId: "spirit58", name: "死の精霊", rarity: "mythic", style: "デフォルト", image: "死の精霊.webp", maxLevel: 5 });
-        spirits.push({ id: 59, spiritId: "spirit59", name: "死の精霊ゴールド", rarity: "special", style: "ゴールド", image: "死の精霊ゴールド.webp", maxLevel: 5 });
-        spirits.push({ id: 60, spiritId: "spirit60", name: "死の精霊グミ", rarity: "special", style: "グミ", image: "死の精霊グミ.webp", maxLevel: 5 });
-        spirits.push({ id: 61, spiritId: "spirit61", name: "死の精霊ギャラクシー", rarity: "special", style: "ギャラクシー", image: "死の精霊ギャラクシー.webp", maxLevel: 5 });
+        spirits.push({ id: 59, spiritId: "spirit59", name: "ゴールド 死の精霊", rarity: "special", style: "ゴールド", image: "死の精霊ゴールド.webp", maxLevel: 5 });
+        spirits.push({ id: 60, spiritId: "spirit60", name: "グミ 死の精霊", rarity: "special", style: "グミ", image: "死の精霊グミ.webp", maxLevel: 5 });
+        spirits.push({ id: 61, spiritId: "spirit61", name: "ギャラクシー 死の精霊", rarity: "special", style: "ギャラクシー", image: "死の精霊ギャラクシー.webp", maxLevel: 5 });
 
+        // 初期レベルを 0 からスタートするように調整
         let savedData = JSON.parse(localStorage.getItem('fortniteSpiritsData')) || {};
         const checklistContainer = document.getElementById('checklist');
         let cardElements = [];
 
         spirits.forEach(spirit => {
-            const itemData = savedData[spirit.spiritId] || { checked: false, level: 1, crown: false, favorite: false };
+            const itemData = savedData[spirit.spiritId] || { checked: false, level: 0, crown: false, favorite: false };
 
             if (itemData.level > spirit.maxLevel) {
                 itemData.level = spirit.maxLevel;
@@ -726,8 +728,9 @@
             const badgeClass = spirit.rarity === 'special' ? 'badge rarity-special-bg' : 'badge';
             const badgeStyle = spirit.rarity === 'special' ? '' : `style="background:var(--rarity-${spirit.rarity})"`;
 
+            // ループを lv = 0 から開始に変更
             let levelOptionsHTML = '';
-            for (let lv = 1; lv <= spirit.maxLevel; lv++) {
+            for (let lv = 0; lv <= spirit.maxLevel; lv++) {
                 levelOptionsHTML += `<option value="${lv}" ${itemData.level == lv ? 'selected' : ''}>Lv.${lv}</option>`;
             }
 
