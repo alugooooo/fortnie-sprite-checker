@@ -323,7 +323,7 @@
             font-size: 0.85rem; 
             color: transparent;
             transition: background 0.2s, color 0.2s;
-            box-shadow: 0 2px 0px rgba(42, 27, 78, 0.1), 
+            box-shadow: 0 2px 0px rgba(42, 27, 78, 0.1); 
             cursor: pointer;
         }
 
@@ -734,12 +734,12 @@
                 levelOptionsHTML += `<option value="${lv}" ${itemData.level == lv ? 'selected' : ''}>Lv.${lv}</option>`;
             }
 
+            // ★修正箇所：タイプ（レアリティ）バッジを残し、スタイルバッジを表示する<span>を削除しました
             card.innerHTML = `
                 ${imageHTML}
                 <span class="item-name">${spirit.name}</span>
                 <div class="card-badges">
                     <span class="${badgeClass}" ${badgeStyle}>${rarityNames[spirit.rarity]}</span>
-                    <span class="badge badge-style">${spirit.style}</span>
                 </div>
                 <div class="card-controls-row">
                     <div class="left-controls">
